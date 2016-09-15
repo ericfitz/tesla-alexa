@@ -2,7 +2,7 @@
 Code and files to connect Amazon Echo ("Alexa") to Tesla automobiles
 Tesla voice user interface for Alexa climate control precondition skill
 
-(c) Eric Fitzgerald (ericf@hushmail.com)
+(c) 2016 Eric Fitzgerald (ericf@hushmail.com)
 
 MIT License (do what you want with it but mention where you got it)
 
@@ -109,6 +109,7 @@ Setup
 =====
 
 Basic overview:
+
 1. Buy a Tesla, set up a my.teslamotors.com username and password and connect your car to the mobile app using those creds.
 2. Buy an Amazon Echo and set it up.
 3. Log into [https://aws.amazon.com AWS].
