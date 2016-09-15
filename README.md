@@ -22,7 +22,7 @@ paste the utterances phrases into the Alexa SDK.
 I chose invocation name "Tesla"
 
 INTENTS FILE
----cut here---
+```
 {
   "intents": [
     {
@@ -36,7 +36,7 @@ INTENTS FILE
     }
   ]
 }
----cut here---
+```
 
 Utterances
 Default utterance format will be "Alexa, tell Tesla to <intent>"
@@ -44,7 +44,7 @@ e.g. "Alexa, tell Tesla to precondition".
 An alternate, acceptable utterance is "Alexa, start Tesla and precondition"
 
 UTTERANCES FILE
----cut here---
+```
 WakeUpTesla wake up
 PreconditionTesla warm up
 PreconditionTesla cool down
@@ -52,10 +52,11 @@ PreconditionTesla start
 PreconditionTesla precondition
 TeslaOff turn off
 TeslaOff sleep
----cut here---
+```
 
 For reference, this is a sample JSON document returned by the Tesla API:
 
+```
 {
     "calendar_enabled": true,
     "remote_start_enabled": true,
@@ -75,5 +76,6 @@ For reference, this is a sample JSON document returned by the Tesla API:
     "state": "online",
     "option_codes": "MS04,RENA,AU01,BC0B,BP00,BR00,BS00,BT85,CDM0,CH00,PPTI,CW02,DA02,DCF0,DRLH,DSH7,DV4W,FG02,HP00,IDCF,IX01,LP01,ME02,MI00,PA00,PF00,PI01,PK00,PS01,PX00,QNET,RFP2,SC01,SP00,SR01,SU01,TM00,TP03,TR00,UTAB,WT19,WTX1,X001,X003,X007,X011,X013,X021,X025,X027,X028,X031,X037,X040,YF00,COUS"
 }
+```
 
 If you ever decode the option_codes, please drop me a line.  I'd love to understand what they mean.
