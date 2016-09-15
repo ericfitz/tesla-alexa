@@ -125,7 +125,7 @@ Basic overview:
 13. Paste the intent schema (json above) and the sample utterances (text above) into the new skill.  Add or edit utterances if you choose.
 14. Under configuration/Global fields, choose the "AWS Lambda ARN" endpoint type, choose "North America", and paste in the ARN of the Lambda function you created a moment ago.  "Account linking" should be no.
 15. Go back to the AWS console, to IAM, Encryption keys, and add "encrypt & decrypt" permission for the Lambda role you created above.
-16. Use the [AWS command line interface]() to encrypt your Tesla password with the key that you created above, e.g. "aws cli kms encrypt --key-id alias/(whatever-you-named-it) --plaintext "your-tesla-password-goes-here".  If your password has a dollar sign in it, you have to escape it with a backslash before you encrypt.
+16. Use the [AWS command line interface](https://aws.amazon.com/cli/) to encrypt your Tesla password with the key that you created above, e.g. "aws cli kms encrypt --key-id alias/(whatever-you-named-it) --plaintext "your-tesla-password-goes-here".  If your password has a dollar sign in it, you have to escape it with a backslash before you encrypt.
 17. Copy the contents of the ciphertext field, and paste them into the "ciphertextBlob" variable on line 74 of the Lambda function python code.
 18. Edit line 71 of the Lambda function and enter the email address you use for your Tesla login.
 19. Save the Lambda function.
