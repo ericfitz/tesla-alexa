@@ -1,8 +1,12 @@
 # tesla-alexa
 Code and files to connect Amazon Echo ("Alexa") to Tesla automobiles
-
 Tesla voice user interface for Alexa climate control precondition skill
-by Eric Fitzgerald (ericf@hushmail.com)
+
+(c) Eric Fitzgerald (ericf@hushmail.com)
+MIT License (do what you want with it but mention where you got it)
+No warranties, express or implied.  Use at your own risk.
+
+Tesla might change their interface at any time, without notice.  The API is not public; it was reverse engineered by Tim Dorr.
 
 This file describes the voice user interface for the Alexa skill.
 
@@ -16,12 +20,22 @@ Alexa SDK: https://developer.amazon.com/appsandservices/solutions/alexa/alexa-sk
 
 I have only tried this as an Alexa custom skill; I doubt it will work as a Smart Home skill.
 
-You'll have to paste the "intents" JSON into the Alexa SDK, and you'll have to
-paste the utterances phrases into the Alexa SDK.
+Intents
+=======
+Intents specifies the interaction model between the user and the Alexa skill.
+I define 3 intents:
+*"WakeUpTesla": Wake up the car (in case it's asleep)
+*"PreconditionTesla": Precondition the car (turn on the climate control system)
+*"TeslaOff": Turn off the climate control system
+
+The intents are provided to the Alexa skills engine as a JSON file, and are referenced in the Lambda code that executes the skill.
+
+You'll have to paste the "intents" JSON into the Alexa SDK.
 
 I chose invocation name "Tesla"
 
-INTENTS FILE
+Intents File
+------------
 ```
 {
   "intents": [
@@ -39,11 +53,21 @@ INTENTS FILE
 ```
 
 Utterances
-Default utterance format will be "Alexa, tell Tesla to <intent>"
+==========
+Utterances are the words that humans will say to the Echo to invoke and manipulate the skill.
+
+The default utterance format will be "Alexa, tell Tesla to <intent>" (assuming you choose "Tesla" as the invocation name).
 e.g. "Alexa, tell Tesla to precondition".
 An alternate, acceptable utterance is "Alexa, start Tesla and precondition"
 
-UTTERANCES FILE
+The more utterance phrases you have, the more flexible Alexa will be in how you invoke the skill.
+
+Note that in the utterances file, each utterance begins with the name of an intent, and then has one or more works associated with the intent.
+
+You'll have to paste these utterances phrases into the Alexa SDK.
+
+Utterances File
+---------------
 ```
 WakeUpTesla wake up
 PreconditionTesla warm up
