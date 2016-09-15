@@ -112,11 +112,11 @@ Basic overview:
 
 1. Buy a Tesla, set up a my.teslamotors.com username and password and connect your car to the mobile app using those creds.
 2. Buy an Amazon Echo and set it up.
-3. Log into [https://aws.amazon.com AWS].
+3. Log into [AWS](https://aws.amazon.com).
 4. Navigate to the IAM console, and choose "encryption keys".  Create a new encryption key.  Give it an alias like "teslapw" (it will be used to encrypt your Tesla password so we don't have to store plaintext anywhere).  The key source is KMS.
 5. Choose key administators and key users for your new key.  We'll come back to this later.
 6. Navigate to the US East (Northern Virginia) region (this is the only region supported by Alexa at this time.
-7. Use the Lambda console to create a new function using the Python 2.7 blueprint "Alexa-skills-color-expert-python".  Reference: https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/developing-an-alexa-skill-as-a-lambda-function
+7. Use the Lambda console to create a new function using the Python 2.7 blueprint "Alexa-skills-color-expert-python".  [Reference](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/developing-an-alexa-skill-as-a-lambda-function)
 8. Choose "Alexa skills kit" as the trigger for the function.  Highlight all the existing python code in the code editor, and replace it with the code from the awslambda-tesla-precondition.py file in this repository.
 9. Have the new Lambda function wizard create a new role for the function.
 10. After you finish creating the function, make a note of the ARN for the Lambda function (in the upper right-hand corner of the Lambda console when viewing the function).
