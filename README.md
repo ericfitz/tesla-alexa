@@ -3,7 +3,9 @@ Code and files to connect Amazon Echo ("Alexa") to Tesla automobiles
 Tesla voice user interface for Alexa climate control precondition skill
 
 (c) Eric Fitzgerald (ericf@hushmail.com)
+
 MIT License (do what you want with it but mention where you got it)
+
 No warranties, express or implied.  Use at your own risk.
 
 Tesla might change their interface at any time, without notice.  The API is not public; it was reverse engineered by Tim Dorr.
@@ -101,5 +103,25 @@ For reference, this is a sample JSON document returned by the Tesla API:
     "option_codes": "MS04,RENA,AU01,BC0B,BP00,BR00,BS00,BT85,CDM0,CH00,PPTI,CW02,DA02,DCF0,DRLH,DSH7,DV4W,FG02,HP00,IDCF,IX01,LP01,ME02,MI00,PA00,PF00,PI01,PK00,PS01,PX00,QNET,RFP2,SC01,SP00,SR01,SU01,TM00,TP03,TR00,UTAB,WT19,WTX1,X001,X003,X007,X011,X013,X021,X025,X027,X028,X031,X037,X040,YF00,COUS"
 }
 ```
-
 If you ever decode the option_codes, please drop me a line.  I'd love to understand what they mean.
+
+Setup
+=====
+
+Basic overview:
+1. Buy a Tesla, set up a my.teslamotors.com username and password and connect your car to the mobile app using those creds.
+2. Buy an Amazon Echo and set it up.
+3. Log into [https://aws.amazon.com AWS].
+4. Navigate to the IAM console, and choose "encryption keys".  Create a new encryption key.  Give it an alias like "teslapw" (it will be used to encrypt your Tesla password so we don't have to store plaintext anywhere).  The key source is KMS.
+5. Choose key administators and key users for your new key.  We'll come back to this later.
+6. Navigate to the US East (Northern Virginia) region (this is the only region supported by Alexa at this time.
+7. Use the Lambda console to create a new function using the Python 2.7 blueprint "Alexa-skills-color-expert-python".  Reference: https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/developing-an-alexa-skill-as-a-lambda-function
+8. Choose "Alexa skills kit" as the trigger for the function.  Highlight all the existing python code in the code editor, and replace it with the code from the awslambda-tesla-precondition.py file in this repository.
+9. Have the new Lambda function wizard create a new role for the function.
+10. After you finish creating the function, make a note of the ARN for the Lambda function (in the upper right-hand corner of the Lambda console when viewing the function).
+11. Log into the Amazon Developer Portal using your Amazon account and choose "create an Alexa skill now": https://developer.amazon.com/alexa-skills-kit
+12. Type a skill name.  Skill type is "custom interaction".  Invocation name is "Tesla" (this is what you will use to tell Alexa to interact with the Tesla). Audio player: no.
+13. Paste the intent schema (json above) and the sample utterances (text above) into the new skill.  Add or edit utterances if you choose.
+14. Under configuration/Global fields, choose the "AWS Lambda ARN" endpoint type, choose "North America", and paste in the ARN of the Lambda function you created a moment ago.  "Account linking" should be no.
+
+At this point, the skill is active and is private to your account.  Do not try to publish the skill; the Tesla name is trademarked, the API is private, and you don't want random people controlling your Tesla.
