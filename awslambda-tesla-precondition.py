@@ -1,8 +1,9 @@
 """
 This function implements an Alexa skill that invokes the Tesla API to turn on the climate control system.
 It can be easily adapted to send any command supported by the Tesla API
-By Eric Fitzgerald (ericf@hushmail.com)
-Based on work by Tim Dorr and Greg Glockner
+(c) 2016 Eric Fitzgerald (ericf@hushmail.com)
+MIT License
+Based on work by Tim Dorr (Tesla API on Apiary) and Greg Glockner (Python client for Tesla API)
 """
 
 from __future__ import print_function
