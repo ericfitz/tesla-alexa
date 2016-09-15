@@ -1,16 +1,9 @@
 # tesla-alexa
 Code and files to connect Amazon Echo ("Alexa") to Tesla automobiles
-Tesla voice user interface for Alexa climate control precondition skill
 
 (c) 2016 Eric Fitzgerald (ericf@hushmail.com)
 
-MIT License (do what you want with it but mention where you got it)
-
-No warranties, express or implied.  Use at your own risk.
-
-Tesla might change their interface at any time, without notice.  The API is not public; it was reverse engineered by Tim Dorr.
-
-This file describes the voice user interface for the Alexa skill.
+No warranties, express or implied.  Use at your own risk.  Tesla might change their interface at any time, without notice.  The API is not public; it was [reverse engineered by Tim Dorr](http://docs.timdorr.apiary.io/#).
 
 The skill invokes an AWS Lambda function that turns on or off the Tesla's climate
 control system.  The skill does not attempt to set a temperature.
@@ -18,17 +11,18 @@ control system.  The skill does not attempt to set a temperature.
 The Lambda function is hard coded to work against the first Tesla in your account.
 If you have more than one, then you'll have to modify the code yourself.
 
-Alexa SDK: https://developer.amazon.com/appsandservices/solutions/alexa/alexa-skills-kit/getting-started-guide
+[Alexa SDK](https://developer.amazon.com/appsandservices/solutions/alexa/alexa-skills-kit/getting-started-guide)
 
 I have only tried this as an Alexa custom skill; I doubt it will work as a Smart Home skill.
 
 Intents
 =======
-Intents specifies the interaction model between the user and the Alexa skill.
+Intents specify the interaction model between the user and the Alexa skill.
 I define 3 intents:
-*"WakeUpTesla": Wake up the car (in case it's asleep)
-*"PreconditionTesla": Precondition the car (turn on the climate control system)
-*"TeslaOff": Turn off the climate control system
+
+* "WakeUpTesla": Wake up the car (in case it's asleep)
+* "PreconditionTesla": Precondition the car (turn on the climate control system)
+* "TeslaOff": Turn off the climate control system
 
 The intents are provided to the Alexa skills engine as a JSON file, and are referenced in the Lambda code that executes the skill.
 
