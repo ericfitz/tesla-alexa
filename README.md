@@ -1,7 +1,7 @@
 # tesla-alexa
 Code and files to connect Amazon Echo ("Alexa") to Tesla automobiles
 
-(c) 2016 Eric Fitzgerald (ericf@hushmail.com)
+(c) 2016-2020 Eric Fitzgerald (efitz@protonmail.com)
 
 No warranties, express or implied.  Use at your own risk.  Tesla might change their interface at any time, without notice.  The API is not public; it was [reverse engineered by Tim Dorr](http://docs.timdorr.apiary.io/#).
 
