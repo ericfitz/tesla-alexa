@@ -115,6 +115,7 @@ Basic overview:
 2. Navigate to the US East (Northern Virginia) region (this is the only region supported by Alexa at this time.
 
 CREATE AND CONFIGURE AN ENCRYPTION KEY
+
 We're going to use the encryption key to encrypt your teslamotors.com password so we don't store the plaintext on AWS
 3. Navigate to the Key Management Service (KMS) console, and choose "customer managed keys".
 4. Create a new encryption key.  Give it an alias like "teslapw" (it will be used to encrypt your Tesla password so we don't have to store plaintext anywhere).
@@ -123,6 +124,7 @@ We're going to use the encryption key to encrypt your teslamotors.com password s
 NOTE ON AWS costs: The key will cost you $1.00 per month.  Key usage will be $0.01 per month.  Lambda usage will be low enough that you don't get billed.
 
 CREATE AND CONFIGURE THE LAMBDA FUNCTION
+
 6. Navigate to the Lambda console.
 7. Use the Lambda console to create a new Lambda function.
      Choose "Author from scratch"
@@ -136,15 +138,18 @@ CREATE AND CONFIGURE THE LAMBDA FUNCTION
 11. After you finish creating the function, make a note of the ARN for the Lambda function (in the upper right-hand corner of the Lambda console when viewing the function).
 
 CONFIGURE THE ALEXA SKILL
+
 12. Log into the Amazon Developer Portal using your Amazon account and choose "create an Alexa skill now": https://developer.amazon.com/alexa-skills-kit
 13. Type a skill name.  Skill type is "custom interaction".  Invocation name is "Tesla" (this is what you will use to tell Alexa to interact with the Tesla). Audio player: no.
 14. Paste the intent schema (json above) and the sample utterances (text above) into the new skill.  Add or edit utterances if you choose.
 15. Under configuration/Global fields, choose the "AWS Lambda ARN" endpoint type, choose "North America", and paste in the ARN of the Lambda function you created a moment ago.  "Account linking" should be no.
 
 ADD LAMBDA FUNCTION PERMISSIONS TO THE ENCRYPTION KEY
+
 16. Go back to the AWS console, to KMS, Encryption keys, and add "encrypt & decrypt" permission for the Lambda role you created above.
 
 ADD YOUR TESLA USERNAME AND PASSWORD AS ENCRYPTED ENVIRONMENT VARIABLES
+
 17. Go back to the Lambda console, edit your function, and scroll down to the "environment variables" section.
 18. Check the box for "enable encryption in transit".
 19. Choose "Use a customer master key" and then choose the key you created above, from the drop-down list.
