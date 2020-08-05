@@ -99,29 +99,57 @@ For reference, this is a sample JSON document returned by the Tesla API:
 ```
 If you ever decode the option_codes, please drop me a line.  I'd love to understand what they mean.
 
+Prerequisites
+=============
+1. Tesla app on mobile phone correctly set up to remotely control Tesla automobile; remote control functional.
+2. Properly configured, working Amazon Echo
+3. AWS account https://aws.amazon.com
+4. Enrolled in Alexa developer program https://developer.amazon.com/alexa-skills-kit
+
 Setup
 =====
 
 Basic overview:
 
-1. Buy a Tesla, set up a my.teslamotors.com username and password and connect your car to the mobile app using those creds.
-2. Buy an Amazon Echo and set it up.
-3. Log into [AWS](https://aws.amazon.com).
-4. Navigate to the IAM console, and choose "encryption keys".  Create a new encryption key.  Give it an alias like "teslapw" (it will be used to encrypt your Tesla password so we don't have to store plaintext anywhere).  The key source is KMS.
+1. Log into [AWS](https://aws.amazon.com).
+2. Navigate to the US East (Northern Virginia) region (this is the only region supported by Alexa at this time.
+
+CREATE AND CONFIGURE AN ENCRYPTION KEY
+We're going to use the encryption key to encrypt your teslamotors.com password so we don't store the plaintext on AWS
+3. Navigate to the Key Management Service (KMS) console, and choose "customer managed keys".
+4. Create a new encryption key.  Give it an alias like "teslapw" (it will be used to encrypt your Tesla password so we don't have to store plaintext anywhere).
 5. Choose key administators and key users for your new key.  We'll come back to this later.
-6. Navigate to the US East (Northern Virginia) region (this is the only region supported by Alexa at this time.
-7. Use the Lambda console to create a new function using the Python 2.7 blueprint "Alexa-skills-color-expert-python".  [Reference](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/developing-an-alexa-skill-as-a-lambda-function)
-8. Choose "Alexa skills kit" as the trigger for the function.  Highlight all the existing python code in the code editor, and replace it with the code from the awslambda-tesla-precondition.py file in this repository.
-9. Have the new Lambda function wizard create a new role for the function.
-10. After you finish creating the function, make a note of the ARN for the Lambda function (in the upper right-hand corner of the Lambda console when viewing the function).
-11. Log into the Amazon Developer Portal using your Amazon account and choose "create an Alexa skill now": https://developer.amazon.com/alexa-skills-kit
-12. Type a skill name.  Skill type is "custom interaction".  Invocation name is "Tesla" (this is what you will use to tell Alexa to interact with the Tesla). Audio player: no.
-13. Paste the intent schema (json above) and the sample utterances (text above) into the new skill.  Add or edit utterances if you choose.
-14. Under configuration/Global fields, choose the "AWS Lambda ARN" endpoint type, choose "North America", and paste in the ARN of the Lambda function you created a moment ago.  "Account linking" should be no.
-15. Go back to the AWS console, to IAM, Encryption keys, and add "encrypt & decrypt" permission for the Lambda role you created above.
-16. Use the [AWS command line interface](https://aws.amazon.com/cli/) to encrypt your Tesla password with the key that you created above, e.g. "aws cli kms encrypt --key-id alias/(whatever-you-named-it) --plaintext "your-tesla-password-goes-here".  If your password has a dollar sign in it, you have to escape it with a backslash before you encrypt.
-17. Copy the contents of the ciphertext field, and paste them into the "ciphertextBlob" variable on line 74 of the Lambda function python code.
-18. Edit line 71 of the Lambda function and enter the email address you use for your Tesla login.
+
+NOTE ON AWS costs: The key will cost you $1.00 per month.  Key usage will be $0.01 per month.  Lambda usage will be low enough that you don't get billed.
+
+CREATE AND CONFIGURE THE LAMBDA FUNCTION
+6. Navigate to the Lambda console.
+7. Use the Lambda console to create a new Lambda function.
+     Choose "Author from scratch"
+     Choose the Python 3.7 runtime
+     Give the function a name
+     Under "execution role", choose "Create a new role with basic Lambda permissions"
+     Create the function
+8. Under "designer", choose "Add trigger", and add "Alexa skills kit" as the trigger for the function.  Disable function verification.
+9. In the function code pane, highlight all the existing code and replace it with the contents of the awslambda-tesla-precondition.py file in this repository.
+10. Save the Lambda function.
+11. After you finish creating the function, make a note of the ARN for the Lambda function (in the upper right-hand corner of the Lambda console when viewing the function).
+
+CONFIGURE THE ALEXA SKILL
+12. Log into the Amazon Developer Portal using your Amazon account and choose "create an Alexa skill now": https://developer.amazon.com/alexa-skills-kit
+13. Type a skill name.  Skill type is "custom interaction".  Invocation name is "Tesla" (this is what you will use to tell Alexa to interact with the Tesla). Audio player: no.
+14. Paste the intent schema (json above) and the sample utterances (text above) into the new skill.  Add or edit utterances if you choose.
+15. Under configuration/Global fields, choose the "AWS Lambda ARN" endpoint type, choose "North America", and paste in the ARN of the Lambda function you created a moment ago.  "Account linking" should be no.
+
+ADD LAMBDA FUNCTION PERMISSIONS TO THE ENCRYPTION KEY
+16. Go back to the AWS console, to KMS, Encryption keys, and add "encrypt & decrypt" permission for the Lambda role you created above.
+
+ADD YOUR TESLA USERNAME AND PASSWORD AS ENCRYPTED ENVIRONMENT VARIABLES
+17. Go back to the Lambda console, edit your function, and scroll down to the "environment variables" section.
+18. Check the box for "enable encryption in transit".
+19. Choose "Use a customer master key" and then choose the key you created above, from the drop-down list.
+18. Create an environment variable named "mytesla_username".  Paste your Tesla account user name into the value field.  Press the "Encrypt" button next to it.
+19. Create an environment variable named "mytesla_password".  Paste your Tesla account password into the value field.  Press the "Encrypt" button next to it.
 19. Save the Lambda function.
 
 At this point, the skill is active and is private to your Amazon account.  Do not try to publish the skill; the Tesla name is trademarked, the API is private, and you don't want random people controlling your Tesla.
