@@ -1,12 +1,12 @@
 """
 This function implements an Alexa skill that invokes the Tesla API to turn on the climate control system.
 It can be easily adapted to send any command supported by the Tesla API
-By Eric Fitzgerald (ericf@hushmail.com)
+By Eric Fitzgerald (efitz@protonmail.com)
 Based on work by Tim Dorr and Greg Glockner
 """
 
-from urllib import urlencode  # will only work with python 2.x; v3 use urllib.parse
-from urllib2 import Request, urlopen  # will only work with python 2.x; v3 use urllib.request
+from urllib.parse import urlencode
+import urllib.request
 import os
 import base64
 import json
@@ -21,9 +21,12 @@ logger.setLevel(logging.INFO)
 # handler so that these are decrypted once per container
 ENC_USER = os.environ['mytesla_username']
 ENC_PW = os.environ['mytesla_password']
-USERNAME = boto3.client('kms').decrypt(CiphertextBlob=b64decode(ENC_USER))['Plaintext']
+
+USERNAME = boto3.client('kms').decrypt(CiphertextBlob=b64decode(ENC_USER), EncryptionContext={'LambdaFunctionName': os.environ['AWS_LAMBDA_FUNCTION_NAME']})['Plaintext'].decode('utf-8')
 logger.info('Decrypted My Tesla user name: ' + USERNAME)
-PASSWORD = boto3.client('kms').decrypt(CiphertextBlob=b64decode(ENC_PW))['Plaintext']
+
+PASSWORD = boto3.client('kms').decrypt(CiphertextBlob=b64decode(ENC_PW), EncryptionContext={'LambdaFunctionName': os.environ['AWS_LAMBDA_FUNCTION_NAME']})['Plaintext'].decode('utf-8')
+
 
 def lambda_handler(event, context):
     """
@@ -310,7 +313,7 @@ class Connection(object):
 		"""
 		Raw urlopen command
 		"""
-		req = Request("%s%s" % (self.url, url), headers=headers)
+		req = urllib.request("%s%s" % (self.url, url), headers=headers)
 		try:
 			req.data = urlencode(data).encode('utf-8') # Python 3
 		except:
@@ -318,7 +321,7 @@ class Connection(object):
 				req.add_data(urlencode(data)) # Python 2
 			except:
 				pass
-		resp = urlopen(req)
+		resp = urllib.request.urlopen(req)
 		charset = resp.info().get('charset', 'utf-8')
 		resp_json = json.loads(resp.read().decode(charset))
 		logger.info("UrlOpen response: %s", resp_json)
